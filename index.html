@@ -2,146 +2,162 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GenAlpha 4K Carousel Tool</title>
+<title>GenAlpha Pro Carousel Tool</title>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
   font-family:'DM Sans',sans-serif;
-  background:linear-gradient(135deg,#0a0a0a,#050505);
+  background:linear-gradient(135deg,#050505,#0a0a0a);
   color:#fff;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
   padding:20px;
 }
 
 h1{
   font-family:'Bebas Neue';
   font-size:42px;
-  letter-spacing:3px;
+  text-align:center;
   background:linear-gradient(90deg,#ff2d2d,#ff6a00);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
 .container{
-  width:100%;
-  max-width:900px;
+  max-width:1000px;
+  margin:auto;
   background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.08);
   border-radius:20px;
   padding:20px;
-  backdrop-filter:blur(10px);
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  backdrop-filter:blur(12px);
 }
 
 textarea{
   width:100%;
-  height:150px;
+  height:120px;
   background:#0d0d0d;
-  border:1px solid #222;
   border-radius:12px;
   color:#fff;
   padding:12px;
-  margin-bottom:15px;
+  margin-bottom:10px;
 }
 
-.buttons{display:flex;gap:10px;flex-wrap:wrap}
-
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
 button{
   flex:1;
-  padding:13px;
+  padding:12px;
   border-radius:999px;
   border:none;
-  font-weight:600;
   cursor:pointer;
 }
-
 .primary{background:linear-gradient(90deg,#ff2d2d,#ff6a00);color:#fff}
-.secondary{background:transparent;border:1px solid #333;color:#aaa}
+.secondary{background:#222;color:#aaa}
+.danger{background:#111;color:#ff4d4d;border:1px solid #ff4d4d}
 
-iframe{
-  width:100%;
-  max-width:480px;
-  height:600px;
-  margin-top:20px;
-  border-radius:16px;
-  border:1px solid #222;
-  background:#fff;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:15px;
 }
+.card{
+  background:#111;
+  border-radius:12px;
+  padding:8px;
+  text-align:center;
+  position:relative;
+}
+.card img{width:100%;border-radius:10px}
+.card input{position:absolute;top:8px;left:8px}
 
-.progress{margin-top:10px;font-size:13px;color:#888}
-
-.footer{margin-top:25px;text-align:center;font-size:13px;color:#666}
-.footer span{color:#ff4444}
+.footer{text-align:center;margin-top:20px;color:#888}
 
 </style></head>
-<body><h1>CAROUSEL TOOL 🚀</h1><div class="container">
-<textarea id="htmlInput" placeholder="Paste your carousel HTML here..."></textarea><div class="buttons">
+<body><h1>CAROUSEL PRO 🚀</h1><div class="container">
+<textarea id="htmlInput" placeholder="Paste HTML..."></textarea><div class="buttons">
 <button class="secondary" onclick="loadPreview()">Preview</button>
-<button class="primary" onclick="downloadSlides()">Download Images</button>
-<button class="primary" onclick="downloadZIP()">Download ZIP</button>
-</div><div class="progress" id="progress"></div>
-</div><iframe id="preview"></iframe><div class="footer">
-Made by <span>Aditya Tomar</span> • Instagram: <span>@genalpha.in</span>
-</div><script>
+<button class="primary" onclick="generateSlides()">Generate Slides</button>
+<button class="primary" onclick="downloadSelected()">Download Selected</button>
+<button class="primary" onclick="downloadAll()">Download All</button>
+<button class="primary" onclick="downloadZip()">ZIP</button>
+<button class="danger" onclick="clearAll()">Clear</button>
+</div><div id="slidesContainer" class="grid"></div>
+</div><div class="footer">Made by Aditya Tomar • @genalpha.in</div><script>
+let slideImages=[];
+
 function loadPreview(){
   const html=document.getElementById('htmlInput').value;
-  document.getElementById('preview').srcdoc=html;
+  const iframe=document.createElement('iframe');
+  iframe.style.display='none';
+  document.body.appendChild(iframe);
+  iframe.srcdoc=html;
+  setTimeout(()=>generateSlides(iframe),1000);
 }
 
-async function captureSlides(){
-  const iframe=document.getElementById('preview');
-  const doc=iframe.contentDocument||iframe.contentWindow.document;
+async function generateSlides(iframeParam){
+  let iframe=iframeParam || document.querySelector('iframe');
+  if(!iframe) return alert('Preview first');
+
+  let doc=iframe.contentDocument;
   let slides=doc.querySelectorAll('.slide');
 
-  if(slides.length===0){
-    alert("No slides found");
-    return [];
-  }
-
-  let images=[];
+  slideImages=[];
+  let container=document.getElementById('slidesContainer');
+  container.innerHTML='';
 
   for(let i=0;i<slides.length;i++){
-    let canvas=await html2canvas(slides[i],{scale:4,useCORS:true});
-    images.push(canvas.toDataURL("image/png"));
-    document.getElementById('progress').innerText=`Processing ${i+1}/${slides.length}`;
+    let canvas=await html2canvas(slides[i],{scale:3});
+    let img=canvas.toDataURL();
+    slideImages.push(img);
+
+    let card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=`<input type="checkbox" checked data-index="${i}"><img src="${img}">`;
+    container.appendChild(card);
   }
-
-  return images;
 }
 
-async function downloadSlides(){
-  let images=await captureSlides();
+function getSelected(){
+  let checks=document.querySelectorAll('input[type=checkbox]');
+  let selected=[];
+  checks.forEach(c=>{if(c.checked)selected.push(c.dataset.index)});
+  return selected;
+}
 
-  images.forEach((img,i)=>{
-    let link=document.createElement('a');
-    link.download=`slide-${i+1}.png`;
-    link.href=img;
-    link.click();
+function downloadSelected(){
+  let sel=getSelected();
+  sel.forEach(i=>{
+    let a=document.createElement('a');
+    a.href=slideImages[i];
+    a.download=`slide-${parseInt(i)+1}.png`;
+    a.click();
   });
-
-  document.getElementById('progress').innerText="Done ✅";
 }
 
-async function downloadZIP(){
+function downloadAll(){
+  slideImages.forEach((img,i)=>{
+    let a=document.createElement('a');
+    a.href=img;
+    a.download=`slide-${i+1}.png`;
+    a.click();
+  });
+}
+
+async function downloadZip(){
   let zip=new JSZip();
-  let images=await captureSlides();
-
-  images.forEach((img,i)=>{
-    zip.file(`slide-${i+1}.png`, img.split(',')[1], {base64:true});
+  slideImages.forEach((img,i)=>{
+    zip.file(`slide-${i+1}.png`,img.split(',')[1],{base64:true});
   });
+  let content=await zip.generateAsync({type:'blob'});
+  let a=document.createElement('a');
+  a.href=URL.createObjectURL(content);
+  a.download='slides.zip';
+  a.click();
+}
 
-  zip.generateAsync({type:"blob"}).then(function(content){
-    let link=document.createElement('a');
-    link.href=URL.createObjectURL(content);
-    link.download="genalpha-carousel.zip";
-    link.click();
-  });
-
-  document.getElementById('progress').innerText="ZIP Ready ✅";
+function clearAll(){
+  document.getElementById('htmlInput').value='';
+  document.getElementById('slidesContainer').innerHTML='';
+  slideImages=[];
 }
 </script></body>
 </html>
