@@ -1,163 +1,608 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GenAlpha Pro Carousel Tool</title>
-<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:'DM Sans',sans-serif;
-  background:linear-gradient(135deg,#050505,#0a0a0a);
-  color:#fff;
-  padding:20px;
-}
+<title>5 Online Scams in India – @genalpha.in</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-h1{
-  font-family:'Bebas Neue';
-  font-size:42px;
-  text-align:center;
-  background:linear-gradient(90deg,#ff2d2d,#ff6a00);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.container{
-  max-width:1000px;
-  margin:auto;
-  background:rgba(255,255,255,0.03);
-  border-radius:20px;
-  padding:20px;
-  backdrop-filter:blur(12px);
-}
-
-textarea{
-  width:100%;
-  height:120px;
-  background:#0d0d0d;
-  border-radius:12px;
-  color:#fff;
-  padding:12px;
-  margin-bottom:10px;
-}
-
-.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}
-button{
-  flex:1;
-  padding:12px;
-  border-radius:999px;
-  border:none;
-  cursor:pointer;
-}
-.primary{background:linear-gradient(90deg,#ff2d2d,#ff6a00);color:#fff}
-.secondary{background:#222;color:#aaa}
-.danger{background:#111;color:#ff4d4d;border:1px solid #ff4d4d}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-  gap:15px;
-}
-.card{
-  background:#111;
-  border-radius:12px;
-  padding:8px;
-  text-align:center;
-  position:relative;
-}
-.card img{width:100%;border-radius:10px}
-.card input{position:absolute;top:8px;left:8px}
-
-.footer{text-align:center;margin-top:20px;color:#888}
-
-</style></head>
-<body><h1>CAROUSEL PRO 🚀</h1><div class="container">
-<textarea id="htmlInput" placeholder="Paste HTML..."></textarea><div class="buttons">
-<button class="secondary" onclick="loadPreview()">Preview</button>
-<button class="primary" onclick="generateSlides()">Generate Slides</button>
-<button class="primary" onclick="downloadSelected()">Download Selected</button>
-<button class="primary" onclick="downloadAll()">Download All</button>
-<button class="primary" onclick="downloadZip()">ZIP</button>
-<button class="danger" onclick="clearAll()">Clear</button>
-</div><div id="slidesContainer" class="grid"></div>
-</div><div class="footer">Made by Aditya Tomar • @genalpha.in</div><script>
-let slideImages=[];
-
-function loadPreview(){
-  const html=document.getElementById('htmlInput').value;
-  const iframe=document.createElement('iframe');
-  iframe.style.display='none';
-  document.body.appendChild(iframe);
-  iframe.srcdoc=html;
-  setTimeout(()=>generateSlides(iframe),1000);
-}
-
-async function generateSlides(iframeParam){
-  let iframe=iframeParam || document.querySelector('iframe');
-  if(!iframe) return alert('Preview first');
-
-  let doc=iframe.contentDocument;
-  let slides=doc.querySelectorAll('.slide');
-
-  slideImages=[];
-  let container=document.getElementById('slidesContainer');
-  container.innerHTML='';
-
-  for(let i=0;i<slides.length;i++){
-    let canvas=await html2canvas(slides[i],{scale:3});
-    let img=canvas.toDataURL();
-    slideImages.push(img);
-
-    let card=document.createElement('div');
-    card.className='card';
-    card.innerHTML=`<input type="checkbox" checked data-index="${i}"><img src="${img}">`;
-    container.appendChild(card);
+  body {
+    background: #0a0a0a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'DM Sans', sans-serif;
+    padding: 40px 20px;
+    gap: 24px;
   }
-}
 
-function getSelected(){
-  let checks=document.querySelectorAll('input[type=checkbox]');
-  let selected=[];
-  checks.forEach(c=>{if(c.checked)selected.push(c.dataset.index)});
-  return selected;
-}
+  .controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .controls button {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 10px 24px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  .controls button:hover { background: #2a2a2a; border-color: #ff4444; }
+  .slide-counter {
+    color: #666;
+    font-size: 13px;
+    font-family: 'Space Mono', monospace;
+    min-width: 50px;
+    text-align: center;
+  }
 
-function downloadSelected(){
-  let sel=getSelected();
-  sel.forEach(i=>{
-    let a=document.createElement('a');
-    a.href=slideImages[i];
-    a.download=`slide-${parseInt(i)+1}.png`;
-    a.click();
+  /* ─── Slide wrapper: 4:5 ratio ─── */
+  .carousel-wrapper {
+    position: relative;
+    width: 480px;
+    height: 600px;
+    overflow: hidden;
+  }
+  .carousel-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s cubic-bezier(0.77,0,0.175,1);
+  }
+  .slide {
+    min-width: 480px;
+    height: 600px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  /* ─── Branding ─── */
+  .brand {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    opacity: 0.55;
+    z-index: 10;
+  }
+  .brand svg { width: 14px; height: 14px; }
+  .brand span {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    color: #fff;
+  }
+  /* First slide branding more visible */
+  .slide-0 .brand { opacity: 0.85; }
+
+  /* ─── SLIDE 0 – Cover ─── */
+  .slide-0 {
+    background: #0d0d0d;
+    border: 1px solid #1e1e1e;
+  }
+  .slide-0 .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,60,60,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,60,60,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .slide-0 .accent-circle {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,40,40,0.18) 0%, transparent 70%);
+    top: -60px; right: -60px;
+  }
+  .slide-0 .tag {
+    display: inline-block;
+    background: rgba(255,50,50,0.12);
+    border: 1px solid rgba(255,50,50,0.3);
+    color: #ff4444;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+  .slide-0 .headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 72px;
+    line-height: 0.9;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    z-index: 1;
+  }
+  .slide-0 .headline span { color: #ff3333; }
+  .slide-0 .sub {
+    font-size: 14px;
+    color: #888;
+    line-height: 1.5;
+    max-width: 300px;
+    z-index: 1;
+    margin-bottom: 28px;
+  }
+  .slide-0 .swipe-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 999px;
+    padding: 8px 16px;
+    width: fit-content;
+    color: #666;
+    font-size: 12px;
+    z-index: 1;
+  }
+  .slide-0 .swipe-pill .arrow {
+    color: #ff4444;
+    font-size: 14px;
+    animation: nudge 1.5s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%,100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+  }
+  .slide-0 .number-strip {
+    position: absolute;
+    bottom: 60px; left: 20px;
+    display: flex; gap: 8px;
+  }
+  .slide-0 .num-badge {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255,50,50,0.1);
+    border: 1px solid rgba(255,50,50,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #ff5555;
+  }
+
+  /* ─── SCAM SLIDES (1–5) ─── */
+  .scam-slide {
+    background: #0d0d0d;
+    border: 1px solid #1e1e1e;
+  }
+  .scam-slide .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  .scam-slide .scam-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 15px;
+    letter-spacing: 3px;
+    color: #ff4444;
+  }
+  .scam-slide .dots {
+    display: flex; gap: 5px;
+  }
+  .scam-slide .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #222;
+  }
+  .scam-slide .dot.active { background: #ff4444; }
+
+  .scam-slide .icon-block {
+    width: 72px; height: 72px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin-bottom: 18px;
+    position: relative;
+  }
+  .scam-slide .scam-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px;
+    line-height: 0.95;
+    color: #fff;
+    margin-bottom: 14px;
+    letter-spacing: 0.5px;
+  }
+  .scam-slide .scam-title span { color: #ff3333; }
+
+  .scam-slide .desc {
+    font-size: 13.5px;
+    color: #aaa;
+    line-height: 1.65;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+  .scam-slide .red-flag-box {
+    background: rgba(255,40,40,0.07);
+    border-left: 3px solid #ff3333;
+    border-radius: 0 8px 8px 0;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+  }
+  .scam-slide .red-flag-box .rf-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #ff5555;
+    margin-bottom: 5px;
+  }
+  .scam-slide .red-flag-box .rf-text {
+    font-size: 12.5px;
+    color: #ccc;
+    line-height: 1.5;
+  }
+  .scam-slide .tip-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .scam-slide .chip {
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 999px;
+    padding: 5px 11px;
+    font-size: 11px;
+    color: #888;
+  }
+  .scam-slide .chip.highlight {
+    border-color: rgba(255,50,50,0.3);
+    color: #ff7070;
+    background: rgba(255,40,40,0.06);
+  }
+
+  /* ─── SLIDE 6 – CTA ─── */
+  .slide-6 {
+    background: #0d0d0d;
+    border: 1px solid #1e1e1e;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .slide-6 .bg-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,60,60,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,60,60,0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .slide-6 .shield {
+    font-size: 56px;
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
+  }
+  .slide-6 .cta-head {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 54px;
+    line-height: 0.95;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    z-index: 1;
+  }
+  .slide-6 .cta-head span { color: #ff3333; }
+  .slide-6 .cta-sub {
+    font-size: 13px;
+    color: #777;
+    line-height: 1.6;
+    max-width: 320px;
+    margin: 0 auto 28px;
+    z-index: 1;
+  }
+  .slide-6 .action-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    z-index: 1;
+    position: relative;
+  }
+  .slide-6 .btn-red {
+    background: #ff3333;
+    color: #fff;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    cursor: default;
+  }
+  .slide-6 .btn-ghost {
+    background: transparent;
+    color: #888;
+    border: 1px solid #2a2a2a;
+    padding: 11px 22px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: default;
+  }
+  .slide-6 .stat-row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 28px;
+    z-index: 1;
+    position: relative;
+  }
+  .slide-6 .stat {
+    text-align: center;
+  }
+  .slide-6 .stat .val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: #ff4444;
+  }
+  .slide-6 .stat .lbl {
+    font-size: 10px;
+    color: #555;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <button onclick="prev()">← Prev</button>
+  <span class="slide-counter" id="counter">1 / 7</span>
+  <button onclick="next()">Next →</button>
+</div>
+
+<div class="carousel-wrapper">
+  <div class="carousel-track" id="track">
+
+    <!-- SLIDE 0: COVER -->
+    <div class="slide slide-0">
+      <div class="bg-grid"></div>
+      <div class="accent-circle"></div>
+      <div class="tag">⚠ CYBER SAFETY ALERT</div>
+      <div class="headline">5 ONLINE<br><span>SCAMS</span><br>RIGHT NOW</div>
+      <p class="sub">Fraudsters are evolving fast. Here's what's targeting Indians in 2024 — and how to stay safe.</p>
+      <div class="swipe-pill"><span>Swipe to learn</span><span class="arrow">→</span></div>
+      <div class="number-strip">
+        <div class="num-badge">01</div>
+        <div class="num-badge">02</div>
+        <div class="num-badge">03</div>
+        <div class="num-badge">04</div>
+        <div class="num-badge">05</div>
+      </div>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+        </svg>
+        <span>@genalpha.in</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 1 -->
+    <div class="slide scam-slide">
+      <div class="top-bar">
+        <span class="scam-num">SCAM 01 / 05</span>
+        <div class="dots">
+          <div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+      <div class="icon-block" style="background:rgba(255,165,0,0.1);">💼</div>
+      <div class="scam-title">FAKE<br><span>JOB</span><br>OFFERS</div>
+      <p class="desc">Fraudsters post lucrative WFH jobs on Telegram, WhatsApp & fake job portals. They ask for a "registration fee" or "training deposit" upfront — then vanish with your money.</p>
+      <div class="red-flag-box">
+        <div class="rf-label">🚩 RED FLAGS</div>
+        <div class="rf-text">Any job that asks for money before you start. No verifiable company address. Salary "too good to be true".</div>
+      </div>
+      <div class="tip-chips">
+        <div class="chip highlight">Never pay to get a job</div>
+        <div class="chip">Verify on LinkedIn</div>
+        <div class="chip">Check MCA portal</div>
+      </div>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+        </svg>
+        <span>@genalpha.in</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide scam-slide">
+      <div class="top-bar">
+        <span class="scam-num">SCAM 02 / 05</span>
+        <div class="dots">
+          <div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+      <div class="icon-block" style="background:rgba(0,200,255,0.08);">📱</div>
+      <div class="scam-title">OTP &<br><span>SIM</span><br>SWAP</div>
+      <p class="desc">Scammers impersonate telecom agents or bank reps and trick you into sharing OTPs or getting your SIM swapped — giving them full access to your bank accounts and UPI apps.</p>
+      <div class="red-flag-box">
+        <div class="rf-label">🚩 RED FLAGS</div>
+        <div class="rf-text">Unexpected call from "KYC team." Sudden loss of mobile network. Urgency around "SIM expiry."</div>
+      </div>
+      <div class="tip-chips">
+        <div class="chip highlight">Never share OTP with anyone</div>
+        <div class="chip">Activate SIM lock</div>
+        <div class="chip">Use 2FA via app</div>
+      </div>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+        </svg>
+        <span>@genalpha.in</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide scam-slide">
+      <div class="top-bar">
+        <span class="scam-num">SCAM 03 / 05</span>
+        <div class="dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+      <div class="icon-block" style="background:rgba(180,0,255,0.08);">🏦</div>
+      <div class="scam-title">INVEST<br><span>MENT</span><br>FRAUD</div>
+      <p class="desc">Fake trading apps, crypto "gurus," and Telegram groups promise guaranteed 30–200% returns. Often structured as Ponzi or pump-and-dump schemes targeting first-time investors.</p>
+      <div class="red-flag-box">
+        <div class="rf-label">🚩 RED FLAGS</div>
+        <div class="rf-text">"Guaranteed returns." No SEBI registration. Pressure to recruit others to earn more.</div>
+      </div>
+      <div class="tip-chips">
+        <div class="chip highlight">Verify SEBI registration</div>
+        <div class="chip">No guaranteed ROI exists</div>
+        <div class="chip">Report on Cyber Crime portal</div>
+      </div>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+        </svg>
+        <span>@genalpha.in</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 4 -->
+    <div class="slide scam-slide">
+      <div class="top-bar">
+        <span class="scam-num">SCAM 04 / 05</span>
+        <div class="dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+        </div>
+      </div>
+      <div class="icon-block" style="background:rgba(255,50,50,0.08);">👮</div>
+      <div class="scam-title">DIGITAL<br><span>ARREST</span><br>SCAM</div>
+      <p class="desc">Scammers pose as CBI, narcotics, or customs officers on video call. They claim a parcel with drugs was intercepted in your name and demand money to "close the case." Even PM Modi warned about this.</p>
+      <div class="red-flag-box">
+        <div class="rf-label">🚩 RED FLAGS</div>
+        <div class="rf-text">Real police NEVER arrest over video calls. Demands for immediate payment or wire transfer. Threats of "immediate arrest."</div>
+      </div>
+      <div class="tip-chips">
+        <div class="chip highlight">Hang up immediately</div>
+        <div class="chip">Call 1930 helpline</div>
+        <div class="chip">No such law exists</div>
+      </div>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+        </svg>
+        <span>@genalpha.in</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 5 -->
+    <div class="slide scam-slide">
+      <div class="top-bar">
+        <span class="scam-num">SCAM 05 / 05</span>
+        <div class="dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+        </div>
+      </div>
+      <div class="icon-block" style="background:rgba(0,255,120,0.06);">💬</div>
+      <div class="scam-title">WHATS<br><span>APP</span><br>SCAMS</div>
+      <p class="desc">From fake lottery wins to "wrong number" romance scams and malware APK links — WhatsApp is India's #1 scam delivery channel. Clicking unknown links can silently install spyware on your phone.</p>
+      <div class="red-flag-box">
+        <div class="rf-label">🚩 RED FLAGS</div>
+        <div class="rf-text">Unknown international numbers. "You've won a prize." Links asking for bank/Aadhaar details. Asking you to install an APK file.</div>
+      </div>
+      <div class="tip-chips">
+        <div class="chip highlight">Block & report immediately</div>
+        <div class="chip">Never install APKs from chat</div>
+        <div class="chip">Turn off auto-download</div>
+      </div>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+        </svg>
+        <span>@genalpha.in</span>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: CTA -->
+    <div class="slide slide-6">
+      <div class="bg-grid"></div>
+      <div class="shield">🛡️</div>
+      <div class="cta-head">STAY<br><span>SAFE.</span><br>STAY AWARE.</div>
+      <p class="cta-sub">Knowledge is your strongest shield. Share this with someone who needs to see it. Report scams at <strong style="color:#ff5555">cybercrime.gov.in</strong> or call <strong style="color:#ff5555">1930</strong>.</p>
+      <div class="action-row">
+        <div class="btn-red">📤 Share This</div>
+        <div class="btn-ghost">🔁 Follow for more</div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="val">₹11K Cr</div><div class="lbl">LOST IN 2023</div></div>
+        <div class="stat"><div class="val">7.4L+</div><div class="lbl">COMPLAINTS</div></div>
+        <div class="stat"><div class="val">1930</div><div class="lbl">HELPLINE</div></div>
+      </div>
+      <div class="brand">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/>
+        </svg>
+        <span>@genalpha.in</span>
+      </div>
+    </div>
+
+  </div><!-- /track -->
+</div><!-- /wrapper -->
+
+<script>
+  let cur = 0;
+  const total = 7;
+  const track = document.getElementById('track');
+  const counter = document.getElementById('counter');
+
+  function go(n) {
+    cur = Math.max(0, Math.min(total - 1, n));
+    track.style.transform = `translateX(-${cur * 480}px)`;
+    counter.textContent = `${cur + 1} / ${total}`;
+  }
+  function next() { go(cur + 1); }
+  function prev() { go(cur - 1); }
+
+  // Keyboard nav
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
   });
-}
 
-function downloadAll(){
-  slideImages.forEach((img,i)=>{
-    let a=document.createElement('a');
-    a.href=img;
-    a.download=`slide-${i+1}.png`;
-    a.click();
+  // Touch/swipe
+  let startX = 0;
+  const wrapper = document.querySelector('.carousel-wrapper');
+  wrapper.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  wrapper.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (dx < -40) next();
+    if (dx > 40) prev();
   });
-}
-
-async function downloadZip(){
-  let zip=new JSZip();
-  slideImages.forEach((img,i)=>{
-    zip.file(`slide-${i+1}.png`,img.split(',')[1],{base64:true});
-  });
-  let content=await zip.generateAsync({type:'blob'});
-  let a=document.createElement('a');
-  a.href=URL.createObjectURL(content);
-  a.download='slides.zip';
-  a.click();
-}
-
-function clearAll(){
-  document.getElementById('htmlInput').value='';
-  document.getElementById('slidesContainer').innerHTML='';
-  slideImages=[];
-}
-</script></body>
+</script>
+</body>
 </html>
