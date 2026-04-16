@@ -11,6 +11,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
 <body>
@@ -33,6 +34,8 @@
     <div class="nav-center">
       <div class="nav-stat"><span id="navSlideCount">0</span><small>Slides</small></div>
       <div class="nav-divider"></div>
+      <div class="nav-stat"><span id="navSelectedCount">0</span><small>Selected</small></div>
+      <div class="nav-divider"></div>
       <div class="nav-stat"><span id="navDownCount">0</span><small>Downloads</small></div>
       <div class="nav-divider"></div>
       <div class="nav-stat"><span id="navSize">—</span><small>Size</small></div>
@@ -50,19 +53,20 @@
     <div class="hero-section">
       <div class="hero-badge"><span class="badge-dot"></span>Premium Carousel Downloader</div>
       <h1 class="hero-title">Create <span class="gradient-text">Stunning</span><br/>Instagram Carousels</h1>
-      <p class="hero-sub">Drop HTML file or Paste code → Choose Ratio → Download in <strong>4K</strong></p>
+      <p class="hero-sub">Drop HTML → Customize → Preview → Download in <strong>4K Quality</strong></p>
       <div class="hero-stats">
         <div class="hstat"><i class="fa-solid fa-file-arrow-up"></i> Drag & Drop</div>
         <div class="hstat"><i class="fa-solid fa-image"></i> 4K Quality</div>
         <div class="hstat"><i class="fa-solid fa-crop"></i> All Ratios</div>
-        <div class="hstat"><i class="fa-solid fa-bolt"></i> Auto Detect</div>
+        <div class="hstat"><i class="fa-solid fa-wand-magic-sparkles"></i> Watermark</div>
+        <div class="hstat"><i class="fa-solid fa-file-pdf"></i> PDF Export</div>
       </div>
     </div>
 
     <!-- Toolbar Card -->
     <div class="card toolbar-card">
 
-      <!-- ✅ FILE DROP ZONE - NEW -->
+      <!-- FILE DROP ZONE -->
       <div class="section-title"><i class="fa-solid fa-file-code"></i> Load HTML File</div>
       <div class="drop-zone" id="dropZone"
            ondragover="handleDragOver(event)"
@@ -70,28 +74,23 @@
            ondrop="handleDrop(event)"
            onclick="triggerFileInput()">
         <input type="file" id="fileInput" accept=".html,.htm" style="display:none" onchange="handleFileSelect(event)"/>
-        <div class="drop-icon" id="dropIcon">
-          <i class="fa-solid fa-file-arrow-up"></i>
-        </div>
+        <div class="drop-icon" id="dropIcon"><i class="fa-solid fa-file-arrow-up"></i></div>
         <div class="drop-text" id="dropText">
           <strong>Drag & Drop HTML file here</strong>
           <span>ya click karke file select karo</span>
         </div>
         <div class="drop-sub">Supports: .html · .htm</div>
-        <!-- File loaded state -->
         <div class="drop-loaded hidden" id="dropLoaded">
           <div class="dl-icon">✅</div>
           <div class="dl-info">
             <span class="dl-name" id="dlFileName">file.html</span>
             <span class="dl-size" id="dlFileSize">0 KB</span>
           </div>
-          <button class="dl-remove" onclick="removeFile(event)" title="Remove file">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
+          <button class="dl-remove" onclick="removeFile(event)"><i class="fa-solid fa-xmark"></i></button>
         </div>
       </div>
 
-      <!-- DIVIDER -->
+      <!-- OR -->
       <div class="or-divider">
         <div class="or-line"></div>
         <span class="or-text">OR</span>
@@ -108,7 +107,6 @@
           <button class="ratio-tab" onclick="filterRatio('twitter',this)">🐦 Twitter/X</button>
           <button class="ratio-tab" onclick="filterRatio('print',this)">🖨️ Print</button>
         </div>
-
         <div class="ratio-grid" id="ratioGrid">
           <div class="ratio-card active" data-cat="instagram" data-w="1080" data-h="1080" data-label="1:1" data-name="Square" onclick="selectRatio(this)">
             <div class="ratio-preview" style="aspect-ratio:1/1"><div class="ratio-inner">1:1</div></div>
@@ -159,15 +157,14 @@
             <div class="ratio-info"><span class="ratio-name">Custom</span><span class="ratio-size">Any Size</span><span class="ratio-platform"><i class="fa-solid fa-sliders"></i> Custom</span></div>
           </div>
         </div>
-
         <div class="ratio-info-bar">
           <div class="rib-item"><i class="fa-solid fa-crop-simple"></i><span>Ratio: <strong id="ribRatio">1:1</strong></span></div>
           <div class="rib-divider"></div>
-          <div class="rib-item"><i class="fa-solid fa-ruler-combined"></i><span>Output: <strong id="ribSize">1080 × 1080 px</strong></span></div>
+          <div class="rib-item"><i class="fa-solid fa-ruler-combined"></i><span>Output: <strong id="ribSize">1080×1080</strong></span></div>
           <div class="rib-divider"></div>
           <div class="rib-item"><i class="fa-solid fa-tag"></i><span>Mode: <strong id="ribName">Square</strong></span></div>
           <div class="rib-divider"></div>
-          <div class="rib-item"><i class="fa-solid fa-circle-info"></i><span id="ribMode" style="font-size:11px;color:var(--accent2)">Slide scaled to output</span></div>
+          <div class="rib-item"><i class="fa-solid fa-circle-info"></i><span id="ribMode" style="font-size:11px;color:var(--accent2)">Scaled to output</span></div>
         </div>
       </div>
 
@@ -194,7 +191,69 @@
         </div>
       </div>
 
-      <!-- Font -->
+      <!-- WATERMARK SECTION -->
+      <div class="section-title" style="margin-top:28px"><i class="fa-solid fa-copyright"></i> Watermark</div>
+      <div class="watermark-section">
+        <div class="wm-toggle-row">
+          <label class="toggle-switch">
+            <input type="checkbox" id="wmEnabled" onchange="toggleWatermark(this)"/>
+            <span class="toggle-slider"></span>
+          </label>
+          <span class="wm-toggle-label">Enable Watermark</span>
+          <span class="wm-status hidden" id="wmStatus">✅ Active</span>
+        </div>
+        <div class="wm-options hidden" id="wmOptions">
+          <div class="wm-row">
+            <div class="wm-field">
+              <label>Watermark Text</label>
+              <input type="text" id="wmText" value="@genalpha.in" placeholder="@yourhandle" maxlength="40"/>
+            </div>
+            <div class="wm-field wm-field-sm">
+              <label>Font Size</label>
+              <input type="number" id="wmSize" value="28" min="10" max="80"/>
+            </div>
+          </div>
+          <div class="wm-row">
+            <div class="wm-field">
+              <label>Text Color</label>
+              <div class="color-input-wrap">
+                <input type="color" id="wmColor" value="#ffffff"/>
+                <span id="wmColorVal">#ffffff</span>
+              </div>
+            </div>
+            <div class="wm-field">
+              <label>Opacity: <span id="wmOpacityVal">70</span>%</label>
+              <input type="range" id="wmOpacity" min="10" max="100" value="70" oninput="document.getElementById('wmOpacityVal').textContent=this.value"/>
+            </div>
+          </div>
+          <div class="wm-row">
+            <div class="wm-field">
+              <label>Position</label>
+              <div class="wm-pos-grid">
+                <button class="wm-pos-btn" data-pos="top-left"     onclick="selectWmPos(this)">↖</button>
+                <button class="wm-pos-btn" data-pos="top-center"   onclick="selectWmPos(this)">↑</button>
+                <button class="wm-pos-btn" data-pos="top-right"    onclick="selectWmPos(this)">↗</button>
+                <button class="wm-pos-btn" data-pos="mid-left"     onclick="selectWmPos(this)">←</button>
+                <button class="wm-pos-btn" data-pos="center"       onclick="selectWmPos(this)">●</button>
+                <button class="wm-pos-btn" data-pos="mid-right"    onclick="selectWmPos(this)">→</button>
+                <button class="wm-pos-btn active" data-pos="bottom-left"  onclick="selectWmPos(this)">↙</button>
+                <button class="wm-pos-btn" data-pos="bottom-center" onclick="selectWmPos(this)">↓</button>
+                <button class="wm-pos-btn" data-pos="bottom-right" onclick="selectWmPos(this)">↘</button>
+              </div>
+            </div>
+            <div class="wm-field">
+              <label>Background</label>
+              <div class="wm-bg-chips">
+                <div class="wm-bg-chip active" data-bg="none" onclick="selectWmBg(this)">None</div>
+                <div class="wm-bg-chip" data-bg="dark" onclick="selectWmBg(this)">Dark</div>
+                <div class="wm-bg-chip" data-bg="light" onclick="selectWmBg(this)">Light</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FONT -->
       <div class="section-title" style="margin-top:28px"><i class="fa-solid fa-font"></i> Font Override</div>
       <div class="font-section">
         <div class="font-grid">
@@ -213,7 +272,7 @@
         </div>
       </div>
 
-      <!-- Export Settings -->
+      <!-- EXPORT SETTINGS -->
       <div class="section-title" style="margin-top:28px"><i class="fa-solid fa-sliders"></i> Export Settings</div>
       <div class="settings-row">
         <div class="setting-item">
@@ -239,32 +298,50 @@
             <div class="fit-chip" data-fit="stretch" onclick="selectFit(this)">Stretch</div>
           </div>
         </div>
+        <div class="setting-item">
+          <label>BG Color (Contain)</label>
+          <div class="bg-color-row">
+            <input type="color" id="bgColor" value="#000000" oninput="updateBgColor(this)"/>
+            <span id="bgColorVal">#000000</span>
+            <div class="bg-presets">
+              <div class="bg-preset" style="background:#000000" onclick="setBgPreset('#000000')" title="Black"></div>
+              <div class="bg-preset" style="background:#ffffff" onclick="setBgPreset('#ffffff')" title="White"></div>
+              <div class="bg-preset" style="background:#7c3aed" onclick="setBgPreset('#7c3aed')" title="Purple"></div>
+              <div class="bg-preset" style="background:transparent;border:2px dashed #555" onclick="setBgPreset('transparent')" title="Transparent"></div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Textarea -->
+      <!-- TEXTAREA -->
       <div class="section-title" style="margin-top:28px"><i class="fa-solid fa-code"></i> Paste HTML (Optional)</div>
       <div class="textarea-wrap">
         <textarea id="htmlInput" placeholder="🖊️ Paste HTML here... ya upar file drop karo&#10;&#10;Each slide must have class='slide'"></textarea>
         <div class="textarea-actions">
           <button class="ta-btn" onclick="pasteClipboard()"><i class="fa-solid fa-clipboard"></i> Paste</button>
           <button class="ta-btn" onclick="clearInput()"><i class="fa-solid fa-xmark"></i> Clear</button>
+          <button class="ta-btn" id="autoSaveBtn" style="color:var(--accent2)"><i class="fa-solid fa-floppy-disk"></i> <span id="autoSaveLabel">Auto Save: ON</span></button>
           <span id="charCount" class="char-count">0 chars</span>
         </div>
       </div>
 
-      <!-- Buttons -->
+      <!-- ACTION BUTTONS -->
       <div class="btn-group">
         <button class="btn btn-preview" onclick="loadSlides()">
           <i class="fa-solid fa-eye"></i><span>Preview</span>
         </button>
         <button class="btn btn-selected" onclick="downloadSelected()">
           <i class="fa-solid fa-download"></i><span>Selected</span>
+          <span class="btn-badge hidden" id="selectedBadge">0</span>
         </button>
         <button class="btn btn-all" onclick="downloadAll()">
           <i class="fa-solid fa-images"></i><span>All</span>
         </button>
         <button class="btn btn-zip" onclick="downloadZip()">
           <i class="fa-solid fa-file-zipper"></i><span>ZIP</span>
+        </button>
+        <button class="btn btn-pdf" onclick="downloadPDF()">
+          <i class="fa-solid fa-file-pdf"></i><span>PDF</span>
         </button>
         <button class="btn btn-clear" onclick="clearAll()">
           <i class="fa-solid fa-trash"></i><span>Clear</span>
@@ -289,7 +366,7 @@
     <!-- Detected Banner -->
     <div id="detectedBanner" class="detected-banner hidden">
       <i class="fa-solid fa-magnifying-glass"></i>
-      <span id="detectedText">Slide size auto-detected</span>
+      <span id="detectedText">Slide size detected</span>
       <span id="detectedBadge" class="detected-badge"></span>
     </div>
 
@@ -302,14 +379,58 @@
       </label>
       <div class="row-actions">
         <span id="slideCount" class="slide-count"></span>
+        <span id="selectedCountBadge" class="selected-count-badge hidden">0 selected</span>
         <button class="mini-btn" onclick="downloadSelected()">
           <i class="fa-solid fa-download"></i> Download Selected
         </button>
       </div>
     </div>
 
+    <!-- Phone Preview Toggle -->
+    <div id="previewModeRow" class="preview-mode-row hidden">
+      <span class="pm-label"><i class="fa-solid fa-display"></i> View:</span>
+      <div class="pm-chips">
+        <div class="pm-chip active" data-mode="grid" onclick="setViewMode(this,'grid')">
+          <i class="fa-solid fa-grip"></i> Grid
+        </div>
+        <div class="pm-chip" data-mode="phone" onclick="setViewMode(this,'phone')">
+          <i class="fa-solid fa-mobile-screen"></i> Phone Preview
+        </div>
+      </div>
+    </div>
+
     <!-- Slides Grid -->
     <div id="slidesContainer" class="slides-grid"></div>
+
+    <!-- Phone Preview Container -->
+    <div id="phoneContainer" class="phone-container hidden">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-insta-bar">
+            <div class="pib-left">
+              <div class="pib-avatar"></div>
+              <div>
+                <div class="pib-name">genalpha.in</div>
+                <div class="pib-sub">Instagram</div>
+              </div>
+            </div>
+            <div class="pib-dots">···</div>
+          </div>
+          <div class="phone-slide-wrap" id="phoneSlideWrap">
+            <canvas id="phoneCanvas"></canvas>
+          </div>
+          <div class="phone-nav">
+            <button class="pn-btn" onclick="phoneNav(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+            <div class="phone-dots-row" id="phoneDotsRow"></div>
+            <button class="pn-btn" onclick="phoneNav(1)"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+          <div class="phone-actions">
+            <span>❤️</span><span>💬</span><span>📤</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Empty State -->
     <div class="empty-state-default" id="emptyDefault">
@@ -319,7 +440,7 @@
       <div class="empty-steps">
         <div class="step"><span>1</span> Drop/Paste</div>
         <div class="step-arrow">→</div>
-        <div class="step"><span>2</span> Choose Ratio</div>
+        <div class="step"><span>2</span> Ratio</div>
         <div class="step-arrow">→</div>
         <div class="step"><span>3</span> Preview</div>
         <div class="step-arrow">→</div>
@@ -329,15 +450,26 @@
 
   </main>
 
+  <!-- FULLSCREEN LIGHTBOX -->
+  <div class="lightbox hidden" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lb-inner">
+      <button class="lb-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+      <button class="lb-nav lb-prev" onclick="lightboxNav(-1,event)"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="lb-canvas-wrap">
+        <canvas id="lbCanvas"></canvas>
+        <div class="lb-info" id="lbInfo">Slide 1</div>
+      </div>
+      <button class="lb-nav lb-next" onclick="lightboxNav(1,event)"><i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-logo">⚡ GenAlpha Pro</div>
       <p>Made with ❤️ by <strong>Aditya Tomar</strong> · <span class="footer-handle">@genalpha.in</span></p>
       <div class="footer-links">
-        <span>Drag & Drop</span><span>·</span>
-        <span>4K Export</span><span>·</span>
-        <span>All Ratios</span><span>·</span>
-        <span>Auto Size</span>
+        <span>Drag & Drop</span><span>·</span><span>4K Export</span><span>·</span>
+        <span>Watermark</span><span>·</span><span>PDF</span><span>·</span><span>Auto Save</span>
       </div>
     </div>
   </footer>
