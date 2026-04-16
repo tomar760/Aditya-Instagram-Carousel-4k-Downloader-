@@ -34,6 +34,8 @@
       <div class="nav-stat"><span id="navSlideCount">0</span><small>Slides</small></div>
       <div class="nav-divider"></div>
       <div class="nav-stat"><span id="navDownCount">0</span><small>Downloads</small></div>
+      <div class="nav-divider"></div>
+      <div class="nav-stat"><span id="navSize">—</span><small>Size</small></div>
     </div>
     <div class="nav-right">
       <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
@@ -52,7 +54,7 @@
       <div class="hero-stats">
         <div class="hstat"><i class="fa-solid fa-image"></i> 4K Quality</div>
         <div class="hstat"><i class="fa-solid fa-crop"></i> All Ratios</div>
-        <div class="hstat"><i class="fa-solid fa-bolt"></i> Instant Preview</div>
+        <div class="hstat"><i class="fa-solid fa-bolt"></i> Auto Size Detect</div>
         <div class="hstat"><i class="fa-solid fa-mobile-screen"></i> Responsive</div>
       </div>
     </div>
@@ -60,23 +62,20 @@
     <!-- Toolbar Card -->
     <div class="card toolbar-card">
 
-      <!-- RATIO SELECTOR - MAIN FEATURE -->
-      <div class="section-title"><i class="fa-solid fa-crop-simple"></i> Slide Ratio & Size</div>
+      <!-- RATIO SELECTOR -->
+      <div class="section-title"><i class="fa-solid fa-crop-simple"></i> Output Ratio & Size</div>
       <div class="ratio-section">
 
-        <!-- Category Tabs -->
         <div class="ratio-tabs">
-          <button class="ratio-tab active" onclick="filterRatio('all', this)">All</button>
-          <button class="ratio-tab" onclick="filterRatio('instagram', this)">📸 Instagram</button>
-          <button class="ratio-tab" onclick="filterRatio('youtube', this)">▶️ YouTube</button>
-          <button class="ratio-tab" onclick="filterRatio('twitter', this)">🐦 Twitter/X</button>
-          <button class="ratio-tab" onclick="filterRatio('print', this)">🖨️ Print</button>
+          <button class="ratio-tab active" onclick="filterRatio('all',this)">All</button>
+          <button class="ratio-tab" onclick="filterRatio('instagram',this)">📸 Instagram</button>
+          <button class="ratio-tab" onclick="filterRatio('youtube',this)">▶️ YouTube</button>
+          <button class="ratio-tab" onclick="filterRatio('twitter',this)">🐦 Twitter/X</button>
+          <button class="ratio-tab" onclick="filterRatio('print',this)">🖨️ Print</button>
         </div>
 
-        <!-- Ratio Cards Grid -->
         <div class="ratio-grid" id="ratioGrid">
 
-          <!-- Instagram -->
           <div class="ratio-card active" data-cat="instagram" data-w="1080" data-h="1080" data-label="1:1" data-name="Square" onclick="selectRatio(this)">
             <div class="ratio-preview" style="aspect-ratio:1/1"><div class="ratio-inner">1:1</div></div>
             <div class="ratio-info">
@@ -91,11 +90,11 @@
             <div class="ratio-info">
               <span class="ratio-name">Portrait</span>
               <span class="ratio-size">1080×1350</span>
-              <span class="ratio-platform"><i class="fa-brands fa-instagram"></i> Best for Feed</span>
+              <span class="ratio-platform"><i class="fa-brands fa-instagram"></i> Best Feed</span>
             </div>
           </div>
 
-          <div class="ratio-card" data-cat="instagram" data-w="1080" data-h="1920" data-label="9:16" data-name="Story/Reel" onclick="selectRatio(this)">
+          <div class="ratio-card" data-cat="instagram" data-w="1080" data-h="1920" data-label="9:16" data-name="Story" onclick="selectRatio(this)">
             <div class="ratio-preview" style="aspect-ratio:9/16"><div class="ratio-inner">9:16</div></div>
             <div class="ratio-info">
               <span class="ratio-name">Story/Reel</span>
@@ -109,26 +108,16 @@
             <div class="ratio-info">
               <span class="ratio-name">Landscape</span>
               <span class="ratio-size">1080×566</span>
-              <span class="ratio-platform"><i class="fa-brands fa-instagram"></i> Feed Wide</span>
+              <span class="ratio-platform"><i class="fa-brands fa-instagram"></i> Wide Feed</span>
             </div>
           </div>
 
-          <!-- YouTube -->
           <div class="ratio-card" data-cat="youtube" data-w="1920" data-h="1080" data-label="16:9" data-name="YouTube HD" onclick="selectRatio(this)">
             <div class="ratio-preview" style="aspect-ratio:16/9"><div class="ratio-inner">16:9</div></div>
             <div class="ratio-info">
               <span class="ratio-name">YouTube HD</span>
               <span class="ratio-size">1920×1080</span>
               <span class="ratio-platform"><i class="fa-brands fa-youtube"></i> Thumbnail</span>
-            </div>
-          </div>
-
-          <div class="ratio-card" data-cat="youtube" data-w="2560" data-h="1440" data-label="16:9" data-name="YouTube 2K" onclick="selectRatio(this)">
-            <div class="ratio-preview" style="aspect-ratio:16/9"><div class="ratio-inner">16:9</div></div>
-            <div class="ratio-info">
-              <span class="ratio-name">YouTube 2K</span>
-              <span class="ratio-size">2560×1440</span>
-              <span class="ratio-platform"><i class="fa-brands fa-youtube"></i> 2K Quality</span>
             </div>
           </div>
 
@@ -141,7 +130,6 @@
             </div>
           </div>
 
-          <!-- Twitter/X -->
           <div class="ratio-card" data-cat="twitter" data-w="1600" data-h="900" data-label="16:9" data-name="Twitter Post" onclick="selectRatio(this)">
             <div class="ratio-preview" style="aspect-ratio:16/9"><div class="ratio-inner">16:9</div></div>
             <div class="ratio-info">
@@ -151,16 +139,15 @@
             </div>
           </div>
 
-          <div class="ratio-card" data-cat="twitter" data-w="1080" data-h="1080" data-label="1:1" data-name="Twitter Square" onclick="selectRatio(this)">
+          <div class="ratio-card" data-cat="twitter" data-w="1080" data-h="1080" data-label="1:1" data-name="Twitter Sq" onclick="selectRatio(this)">
             <div class="ratio-preview" style="aspect-ratio:1/1"><div class="ratio-inner">1:1</div></div>
             <div class="ratio-info">
-              <span class="ratio-name">Twitter Square</span>
+              <span class="ratio-name">Twitter Sq</span>
               <span class="ratio-size">1080×1080</span>
               <span class="ratio-platform"><i class="fa-brands fa-x-twitter"></i> Twitter/X</span>
             </div>
           </div>
 
-          <!-- Print -->
           <div class="ratio-card" data-cat="print" data-w="2480" data-h="3508" data-label="A4" data-name="A4 Portrait" onclick="selectRatio(this)">
             <div class="ratio-preview" style="aspect-ratio:2480/3508"><div class="ratio-inner">A4</div></div>
             <div class="ratio-info">
@@ -170,7 +157,7 @@
             </div>
           </div>
 
-          <div class="ratio-card" data-cat="print" data-w="3508" data-h="2480" data-label="A4" data-name="A4 Landscape" onclick="selectRatio(this)">
+          <div class="ratio-card" data-cat="print" data-w="3508" data-h="2480" data-label="A4 L" data-name="A4 Landscape" onclick="selectRatio(this)">
             <div class="ratio-preview" style="aspect-ratio:3508/2480"><div class="ratio-inner">A4</div></div>
             <div class="ratio-info">
               <span class="ratio-name">A4 Landscape</span>
@@ -179,11 +166,18 @@
             </div>
           </div>
 
-          <!-- Custom -->
-          <div class="ratio-card custom-ratio-card" data-cat="all" onclick="openCustomRatio()">
-            <div class="ratio-preview" style="aspect-ratio:1/1">
-              <div class="ratio-inner"><i class="fa-solid fa-plus"></i></div>
+          <!-- As-Is: capture exact HTML size -->
+          <div class="ratio-card" data-cat="all" data-w="0" data-h="0" data-label="Auto" data-name="As-Is (HTML Size)" onclick="selectRatio(this)">
+            <div class="ratio-preview" style="aspect-ratio:1/1"><div class="ratio-inner" style="font-size:9px">AUTO</div></div>
+            <div class="ratio-info">
+              <span class="ratio-name">As-Is</span>
+              <span class="ratio-size">HTML Size</span>
+              <span class="ratio-platform"><i class="fa-solid fa-magic-wand-sparkles"></i> Auto Detect</span>
             </div>
+          </div>
+
+          <div class="ratio-card custom-ratio-card" data-cat="all" onclick="openCustomRatio()">
+            <div class="ratio-preview" style="aspect-ratio:1/1"><div class="ratio-inner"><i class="fa-solid fa-plus"></i></div></div>
             <div class="ratio-info">
               <span class="ratio-name">Custom</span>
               <span class="ratio-size">Any Size</span>
@@ -193,29 +187,22 @@
 
         </div>
 
-        <!-- Selected Ratio Info Bar -->
+        <!-- Info Bar -->
         <div class="ratio-info-bar" id="ratioInfoBar">
-          <div class="rib-item">
-            <i class="fa-solid fa-crop-simple"></i>
-            <span>Ratio: <strong id="ribRatio">1:1</strong></span>
-          </div>
+          <div class="rib-item"><i class="fa-solid fa-crop-simple"></i><span>Ratio: <strong id="ribRatio">1:1</strong></span></div>
           <div class="rib-divider"></div>
-          <div class="rib-item">
-            <i class="fa-solid fa-ruler-combined"></i>
-            <span>Size: <strong id="ribSize">1080 × 1080 px</strong></span>
-          </div>
+          <div class="rib-item"><i class="fa-solid fa-ruler-combined"></i><span>Output: <strong id="ribSize">1080 × 1080 px</strong></span></div>
           <div class="rib-divider"></div>
-          <div class="rib-item">
-            <i class="fa-solid fa-tag"></i>
-            <span>Name: <strong id="ribName">Square</strong></span>
-          </div>
+          <div class="rib-item"><i class="fa-solid fa-tag"></i><span>Mode: <strong id="ribName">Square</strong></span></div>
+          <div class="rib-divider"></div>
+          <div class="rib-item"><i class="fa-solid fa-circle-info"></i><span id="ribMode" style="font-size:11px;color:var(--accent2)">Slide will be scaled to fit output size</span></div>
         </div>
       </div>
 
       <!-- Custom Ratio Modal -->
       <div class="custom-modal hidden" id="customModal">
         <div class="custom-modal-box">
-          <div class="cm-title"><i class="fa-solid fa-sliders"></i> Custom Size</div>
+          <div class="cm-title"><i class="fa-solid fa-sliders"></i> Custom Output Size</div>
           <div class="cm-fields">
             <div class="cm-field">
               <label>Width (px)</label>
@@ -230,9 +217,9 @@
           <div class="cm-presets">
             <span>Quick:</span>
             <button onclick="setCustomQuick(1080,1080)">1080²</button>
-            <button onclick="setCustomQuick(1080,1350)">1080×1350</button>
-            <button onclick="setCustomQuick(1920,1080)">1920×1080</button>
-            <button onclick="setCustomQuick(1080,1920)">1080×1920</button>
+            <button onclick="setCustomQuick(1080,1350)">4:5</button>
+            <button onclick="setCustomQuick(1920,1080)">16:9</button>
+            <button onclick="setCustomQuick(1080,1920)">9:16</button>
           </div>
           <div class="cm-actions">
             <button class="cm-cancel" onclick="closeCustomRatio()">Cancel</button>
@@ -242,9 +229,10 @@
       </div>
 
       <!-- Font Selector -->
-      <div class="section-title" style="margin-top:28px"><i class="fa-solid fa-font"></i> Font Customizer</div>
+      <div class="section-title" style="margin-top:28px"><i class="fa-solid fa-font"></i> Font Override (Optional)</div>
       <div class="font-section">
-        <div class="font-grid" id="fontGrid">
+        <div class="font-grid">
+          <div class="font-chip" data-font="none" onclick="selectFont(this)" style="font-style:italic">None (Keep Original)</div>
           <div class="font-chip active" data-font="Poppins" onclick="selectFont(this)" style="font-family:Poppins">Poppins</div>
           <div class="font-chip" data-font="Inter" onclick="selectFont(this)" style="font-family:Inter">Inter</div>
           <div class="font-chip" data-font="Montserrat" onclick="selectFont(this)" style="font-family:Montserrat">Montserrat</div>
@@ -252,10 +240,9 @@
           <div class="font-chip" data-font="Roboto" onclick="selectFont(this)" style="font-family:Roboto">Roboto</div>
           <div class="font-chip" data-font="Space Grotesk" onclick="selectFont(this)" style="font-family:'Space Grotesk'">Space Grotesk</div>
           <div class="font-chip" data-font="Georgia" onclick="selectFont(this)" style="font-family:Georgia">Georgia</div>
-          <div class="font-chip" data-font="Arial" onclick="selectFont(this)" style="font-family:Arial">Arial</div>
         </div>
         <div class="font-preview-box">
-          <span id="fontPreviewText" style="font-family:Poppins">The quick brown fox jumps over the lazy dog 🦊</span>
+          <span id="fontPreviewText" style="font-family:Poppins">The quick brown fox 🦊 — Aditya Tomar</span>
           <small id="fontNameLabel">Poppins</small>
         </div>
       </div>
@@ -267,8 +254,8 @@
           <label>Quality Scale</label>
           <div class="scale-chips">
             <div class="scale-chip" data-scale="2" onclick="selectScale(this)">2x</div>
-            <div class="scale-chip active" data-scale="4" onclick="selectScale(this)">4x ⭐</div>
-            <div class="scale-chip" data-scale="6" onclick="selectScale(this)">6x</div>
+            <div class="scale-chip active" data-scale="3" onclick="selectScale(this)">3x ⭐</div>
+            <div class="scale-chip" data-scale="4" onclick="selectScale(this)">4x</div>
           </div>
         </div>
         <div class="setting-item">
@@ -278,12 +265,20 @@
             <div class="fmt-chip" data-fmt="image/jpeg" onclick="selectFmt(this)">JPG</div>
           </div>
         </div>
+        <div class="setting-item">
+          <label>Fit Mode</label>
+          <div class="scale-chips">
+            <div class="fit-chip active" data-fit="contain" onclick="selectFit(this)" title="Scale to fit, keep ratio">Contain</div>
+            <div class="fit-chip" data-fit="cover" onclick="selectFit(this)" title="Fill output, crop if needed">Cover</div>
+            <div class="fit-chip" data-fit="stretch" onclick="selectFit(this)" title="Stretch to exact size">Stretch</div>
+          </div>
+        </div>
       </div>
 
       <!-- Textarea -->
       <div class="section-title" style="margin-top:28px"><i class="fa-solid fa-code"></i> Paste Carousel HTML</div>
       <div class="textarea-wrap">
-        <textarea id="htmlInput" placeholder="🖊️ Paste your full carousel HTML here...&#10;&#10;Make sure each slide has class='slide'"></textarea>
+        <textarea id="htmlInput" placeholder="🖊️ Paste your full carousel HTML here...&#10;&#10;Each slide must have class='slide'"></textarea>
         <div class="textarea-actions">
           <button class="ta-btn" onclick="pasteClipboard()"><i class="fa-solid fa-clipboard"></i> Paste</button>
           <button class="ta-btn" onclick="clearInput()"><i class="fa-solid fa-xmark"></i> Clear</button>
@@ -300,13 +295,13 @@
           <i class="fa-solid fa-download"></i><span>Selected</span>
         </button>
         <button class="btn btn-all" onclick="downloadAll()">
-          <i class="fa-solid fa-images"></i><span>Download All</span>
+          <i class="fa-solid fa-images"></i><span>All</span>
         </button>
         <button class="btn btn-zip" onclick="downloadZip()">
           <i class="fa-solid fa-file-zipper"></i><span>ZIP</span>
         </button>
         <button class="btn btn-clear" onclick="clearAll()">
-          <i class="fa-solid fa-trash"></i><span>Clear All</span>
+          <i class="fa-solid fa-trash"></i><span>Clear</span>
         </button>
       </div>
     </div>
@@ -323,6 +318,13 @@
       <div class="progress-bar-bg">
         <div class="progress-bar-fill" id="progressFill"></div>
       </div>
+    </div>
+
+    <!-- Detected Size Banner -->
+    <div id="detectedBanner" class="detected-banner hidden">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <span id="detectedText">Slide size auto-detected</span>
+      <span id="detectedBadge" class="detected-badge"></span>
     </div>
 
     <!-- Select All Row -->
@@ -347,7 +349,7 @@
     <div class="empty-state-default" id="emptyDefault">
       <div class="empty-icon-big">🎨</div>
       <h3>Ready to Create!</h3>
-      <p>Choose your ratio, paste HTML and click <strong>Preview</strong></p>
+      <p>Choose ratio → Paste HTML → Click <strong>Preview</strong></p>
       <div class="empty-steps">
         <div class="step"><span>1</span> Choose Ratio</div>
         <div class="step-arrow">→</div>
@@ -368,7 +370,7 @@
       <div class="footer-links">
         <span>4K Export</span><span>·</span>
         <span>All Ratios</span><span>·</span>
-        <span>Multi-Format</span><span>·</span>
+        <span>Auto Size</span><span>·</span>
         <span>Premium UI</span>
       </div>
     </div>
